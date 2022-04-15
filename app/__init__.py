@@ -37,4 +37,4 @@ login = LoginManager(app)
 # Значение «login» выше является именем функции (или конечной точки) для входа в систему.
 login.login_view = 'login'
 
-from app import routes, models
+from app import routes, models, errors
