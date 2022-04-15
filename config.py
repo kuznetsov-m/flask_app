@@ -19,6 +19,9 @@ class BaseConfig(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     ADMINS = ['email@gmail.com']
 
+    # other
+    POSTS_PER_PAGE = 25
+
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
