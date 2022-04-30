@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
 import os
 
 import logging
@@ -18,6 +19,8 @@ login = LoginManager(app)
 # Flask-Login должен знать, что такое функция просмотра, которая обрабатывает логины.
 # Значение «login» выше является именем функции (или конечной точки) для входа в систему.
 login.login_view = 'login'
+
+bootstrap = Bootstrap(app)
 
 # Log file
 if not app.debug:
