@@ -1,9 +1,11 @@
 import os
+from dotenv import load_dotenv
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 # default config
 class BaseConfig(object):
-    basedir = os.path.abspath(os.path.dirname(__file__))
-
     DEBUG = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or '\xbf\xb0\x11\xb1\xcd\xf9\xba\x8bp\x0c...'
     # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://', 1)
