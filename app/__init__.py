@@ -19,11 +19,20 @@ login = LoginManager(app)
 # Если пользователь, который не выполнил вход в систему, пытается просмотреть защищенную страницу, Flask-Login автоматически перенаправляет пользователя в форму для входа и только после завершения процесса входа в систем перенаправляет на страницу, которую пользователь хотел просмотреть.
 # Flask-Login должен знать, что такое функция просмотра, которая обрабатывает логины.
 # Значение «login» выше является именем функции (или конечной точки) для входа в систему.
-login.login_view = 'login'
+login.login_view = 'auth.login'
 
 bootstrap = Bootstrap(app)
 
 moment = Moment(app)
+
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
+from app.auth import bp as auth_bp
+app.register_blueprint(auth_bp, url_prefix='/auth')
+
+from app.main import bp as main_bp
+app.register_blueprint(main_bp)
 
 # Log file
 if not app.debug:
@@ -56,4 +65,4 @@ if not app.debug:
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
-from app import routes, models, errors
+from app import models
