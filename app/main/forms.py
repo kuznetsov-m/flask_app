@@ -5,6 +5,8 @@ from app.models import User
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length
 
+from flask import request
+
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -26,3 +28,15 @@ class PostForm(FlaskForm):
         validators=[DataRequired(), Length(min=1, max=140)]
     )
     submit = SubmitField('Submit')
+
+from flask import request
+
+class SearchForm(FlaskForm):
+    q = StringField(('Search'), validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'meta' not in kwargs:
+            kwargs['meta'] = {'csrf': False}
+        super(SearchForm, self).__init__(*args, **kwargs)

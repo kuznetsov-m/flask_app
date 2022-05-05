@@ -24,6 +24,9 @@ class BaseConfig(object):
     # other
     POSTS_PER_PAGE = 25
 
+    # elasticsearch
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
