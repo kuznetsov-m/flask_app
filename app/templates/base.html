@@ -55,7 +55,14 @@
 
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
-    </div>
+
+    {% block footer %}
+    <footer>
+        <p class="text-center">
+            <a href="https://github.com/kuznetsov-m/flask_app" class="button">Source on GitHub</a> | &copy; Kuznetsov M | 2022
+        </p>
+    </footer>
+    {% endblock %}
 {% endblock %}
 
 {% block scripts %}
