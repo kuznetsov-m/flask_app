@@ -46,7 +46,6 @@ class SearchableMixin(object):
     @classmethod
     def reindex(cls):
         for obj in cls.query:
-            print(obj)
             add_to_index(cls.__tablename__, obj)
 
 db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)

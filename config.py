@@ -8,9 +8,10 @@ load_dotenv(os.path.join(basedir, '.env'))
 class BaseConfig(object):
     DEBUG = False
     SECRET_KEY = os.environ.get('SECRET_KEY') or '\xbf\xb0\x11\xb1\xcd\xf9\xba\x8bp\x0c...'
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://', 1)
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
+    if 'postgres' in SQLALCHEMY_DATABASE_URI:
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://', 1)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # mail server
@@ -26,6 +27,9 @@ class BaseConfig(object):
 
     # elasticsearch
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+
+    # heroku
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
 
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
