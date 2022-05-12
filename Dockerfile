@@ -6,6 +6,8 @@ WORKDIR /home/flask_app
 
 ############################
 # poetry
+# https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker
+
 ENV POETRY_VERSION=1.1.13
 
 RUN pip install "poetry==$POETRY_VERSION"
