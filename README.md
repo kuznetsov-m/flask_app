@@ -12,6 +12,7 @@
 - Gunicorn (HTTP server)
 - Heroku (web hosting)
 - Docker (container virtualization)
+- Redis (background task queue)
 
 ### elasticsearch
 Весь код, который взаимодействует с индексом Elasticsearch в модуле app/search.py.
@@ -43,6 +44,11 @@ MAIL_PASSWORD="pass"
 Elasticsearch
 ```
 ELASTICSEARCH_URL=http://localhost:9200
+```
+
+Redis
+```
+REDIS_URL=redis://
 ```
 
 # deployment

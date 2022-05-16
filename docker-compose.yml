@@ -28,6 +28,12 @@ services:
       - 9200:9200
       - 9300:9300
 
+# redis
+  redis-server:
+    image: redis/redis-stack-server:latest
+    ports:
+      - 6379:6379
+
 # flask_app
   flask_app:
     # Говорим что его надо будет собрать - в качестве контекста
@@ -39,6 +45,7 @@ services:
       APP_SETTINGS: config.DevelopmentConfig
       DATABASE_URL: postgresql://postgres:1234@db:5432/flask_app
       ELASTICSEARCH_URL: http://elasticsearch:9200
+      REDIS_URL: redis://redis-server:6379/0
     # Монтируем локальную директорию . в директорию 
     # внутри контейнера /opt/flask_app
     volumes:
@@ -50,3 +57,18 @@ services:
     depends_on:
       - db
       - elasticsearch
+      - redis-server
+
+# redis worker
+  worker:
+    image: flask_app_flask_app:latest
+    environment:
+      APP_SETTINGS: config.DevelopmentConfig
+      DATABASE_URL: postgresql://postgres:1234@db:5432/flask_app
+    depends_on:
+      - db
+      - redis-server
+    command: rq worker --url redis://redis-server:6379/0 flask_app-tasks
+    links:
+      - db
+      - redis-server

@@ -55,6 +55,8 @@ def export_posts(user_id):
         #     )],
         #     sync=True
         # )
+        # временно результат будем выводить в консоль
+        app.logger.info(json.dumps({'posts': data}, indent=2))
     except:
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
