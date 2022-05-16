@@ -84,8 +84,10 @@ psql -U postgres
 - Для работы через `flask shell` нужно определить в виртуальном окружении `FLASK_APP=flask_app.py`
 - psql. для запроса данных из таблицы пользователей нужно взять название таблицы в "": `select * from "user";`
 Без кавычек получится запрос к таблице с пользователями postgres.
+- Запуск redis воркера `rq worker flask_app-tasks`
 ## Cсылки
 [Flask курс](https://habr.com/ru/post/346306/)
 [elasticsearch docker-compose official doc](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
 [elasticsearch docker-compose](https://levelup.gitconnected.com/docker-compose-made-easy-with-elasticsearch-and-kibana-4cb4110a80dd)
 [flask + postgres docker-compose](https://levelup.gitconnected.com/dockerizing-a-flask-application-with-a-postgres-database-b5e5bfc24848)
+[redis docker run](https://redis.io/docs/stack/get-started/install/docker/)

@@ -12,6 +12,9 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 from elasticsearch import Elasticsearch
 import certifi
 
+from redis import Redis
+import rq
+
 from config import BaseConfig
 
 db = SQLAlchemy()
@@ -54,6 +57,10 @@ def create_app(config_class=BaseConfig):
     else:
         app.elasticsearch = None
     
+    # redis
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('flask_app-tasks', connection=app.redis)
+
     if not app.debug and not app.testing:
         # Logs
         if app.config['LOG_TO_STDOUT']:
