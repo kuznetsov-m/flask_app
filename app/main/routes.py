@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, current_app, g
 from flask_login import current_user, login_required
 from app import db
-from app.main.forms import EditProfileForm, PostForm, SearchForm
+from app.main.forms import EditProfileForm, PostForm, SearchForm, EmptyForm
 from app.models import User, Post
 from app.main import bp
 
@@ -63,8 +63,15 @@ def user(username):
         if posts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
         if posts.has_prev else None
-    return render_template('user.html', user=user, posts=posts.items,
-                           next_url=next_url, prev_url=prev_url)
+    form = EmptyForm()
+    return render_template(
+        'user.html',
+        user=user,
+        posts=posts.items,
+        next_url=next_url,
+        prev_url=prev_url,
+        form=form
+    )
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -87,33 +94,40 @@ def edit_profile():
 @bp.route('/follow/<username>')
 @login_required
 def follow(username):
-    # TODO: form = EmptyForm()
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('User {} not found.'.format(username))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash('You cannot follow yourself!')
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash(f'User {username} not found.')
+            return redirect(url_for('main.index'))
+        if user == current_user:
+            flash('You cannot follow yourself!')
+            return redirect(url_for('main.user', username=username))
+        current_user.follow(user)
+        db.session.commit()
+        flash(f'You are following {username}!')
         return redirect(url_for('main.user', username=username))
-    current_user.follow(user)
-    db.session.commit()
-    flash('You are following {}!'.format(username))
-    return redirect(url_for('main.user', username=username))
+    else:
+        return redirect(url_for('main.index'))
 
 @bp.route('/unfollow/<username>')
 @login_required
 def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('User {} not found.'.format(username))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash('You cannot unfollow yourself!')
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash(f'User {username} not found.')
+            return redirect(url_for('main.index'))
+        if user == current_user:
+            flash('You cannot unfollow yourself!')
+            return redirect(url_for('main.user', username=username))
+        current_user.unfollow(user)
+        db.session.commit()
+        flash(f'You are not following {username}.')
         return redirect(url_for('main.user', username=username))
-    current_user.unfollow(user)
-    db.session.commit()
-    flash('You are not following {}.'.format(username))
-    return redirect(url_for('main.user', username=username))
+    else:
+        return redirect(url_for('main.index'))
 
 @bp.route('/search')
 @login_required
