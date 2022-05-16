@@ -48,8 +48,8 @@ def create_app(config_class=BaseConfig):
     if app.config['ELASTICSEARCH_URL']:
         app.elasticsearch = Elasticsearch(
             [app.config['ELASTICSEARCH_URL']],
-            use_ssl=True,
-            ca_certs=certifi.where()
+            # use_ssl=False,
+            # ca_certs=certifi.where()
         )
     else:
         app.elasticsearch = None
