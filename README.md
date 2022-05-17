@@ -96,9 +96,25 @@ PUT	/api/users/<id>	Изменяет пользователя.
 
 ## Отладка через httpie
 Пакет `httpie` позволяет проводить тестирование REST API.
+
+### POST api/tokens
+```
+(venv) $ http POST http://localhost:5000/api/tokens
+HTTP/1.0 401 UNAUTHORIZED
+(...)
+
+(venv) $ http --auth <username>:<password> POST http://localhost:5000/api/tokens
+HTTP/1.0 200 OK
+(...)
+```
+### DELETE /api/tokens
+```
+(venv) $ http DELETE http://localhost:5000/api/tokens    Authorization:"Bearer pC1Nu9wwyNt8VCj1trWilFdFI276AcbS"
+```
+
 ### GET /api/users/<id>
 ```
-(venv) $ http GET http://localhost:5000/api/users/1
+(venv) $ http GET http://localhost:5000/api/users/1    "Authorization:Bearer pC1Nu9wwyNt8VCj1trWilFdFI276AcbS"
 HTTP/1.0 200 OK
 Content-Length: 457
 Content-Type: application/json
@@ -121,14 +137,14 @@ Server: Werkzeug/0.12.2 Python/3.6.3
     "username": "test_user"
 }
 ```
-### /api/users
+### POST /api/users
 ```
-(venv) $ http POST http://localhost:5000/api/users username=alice password=dog 
+(venv) $ http POST http://localhost:5000/api/users username=alice password=dog     "Authorization:Bearer pC1Nu9wwyNt8VCj1trWilFdFI276AcbS"
     email=alice@example.com "about_me=Hello, my name is Alice!"
 ```
 ### PUT /api/users/<id>
 ```
-(venv) $ http PUT http://localhost:5000/api/users/2 "about_me=Hi, I am Miguel"
+(venv) $ http PUT http://localhost:5000/api/users/2 "about_me=Hi, I am Miguel"     "Authorization:Bearer pC1Nu9wwyNt8VCj1trWilFdFI276AcbS"
 ```
 
 # Остальное
@@ -140,7 +156,11 @@ Server: Werkzeug/0.12.2 Python/3.6.3
 
 ## Cсылки
 [Flask курс](https://habr.com/ru/post/346306/)
+
 [elasticsearch docker-compose official doc](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)
+
 [elasticsearch docker-compose](https://levelup.gitconnected.com/docker-compose-made-easy-with-elasticsearch-and-kibana-4cb4110a80dd)
+
 [flask + postgres docker-compose](https://levelup.gitconnected.com/dockerizing-a-flask-application-with-a-postgres-database-b5e5bfc24848)
+
 [redis docker run](https://redis.io/docs/stack/get-started/install/docker/)
