@@ -85,12 +85,59 @@ docker exec -it flask_app_db_1 bash
 psql -U postgres
 ```
 
+# REST API
+HTTP Method	Resource URL	Notes
+GET	/api/users/<id>	Возвращает пользователя.
+GET	/api/users	Возвращает коллекцию всех пользователей.
+GET	/api/users/<id>/followers	Вернет подписчиков этого пользователя.
+GET	/api/users/<id>/followed	Вернет пользователей, на которых подписан этот пользователь.
+POST	/api/users	Регистрирует новую учетную запись пользователя.
+PUT	/api/users/<id>	Изменяет пользователя.
+
+## Отладка через httpie
+Пакет `httpie` позволяет проводить тестирование REST API.
+### GET /api/users/<id>
+```
+(venv) $ http GET http://localhost:5000/api/users/1
+HTTP/1.0 200 OK
+Content-Length: 457
+Content-Type: application/json
+Date: Mon, 27 Nov 2017 20:19:01 GMT
+Server: Werkzeug/0.12.2 Python/3.6.3
+
+{
+    "_links": {
+        "avatar": "https://www.gravatar.com/avatar/9b2c5cb3245ebeadf7a67dd4e7f62a9e?d=identicon&s=128",
+        "followed": "/api/users/1/followed",
+        "followers": "/api/users/1/followers",
+        "self": "/api/users/1"
+    },
+    "about_me": "About me",
+    "followed_count": 0,
+    "follower_count": 1,
+    "id": 1,
+    "last_seen": "2022-05-17T10:31:38.909834Z",
+    "post_count": 10,
+    "username": "test_user"
+}
+```
+### /api/users
+```
+(venv) $ http POST http://localhost:5000/api/users username=alice password=dog 
+    email=alice@example.com "about_me=Hello, my name is Alice!"
+```
+### PUT /api/users/<id>
+```
+(venv) $ http PUT http://localhost:5000/api/users/2 "about_me=Hi, I am Miguel"
+```
+
 # Остальное
 - для добавления в индекс elasticsearch. Выполнить `Posts.reindex()`. Возможно перед этим потребуется вручную создать индекс `post`.
 - Для работы через `flask shell` нужно определить в виртуальном окружении `FLASK_APP=flask_app.py`
 - psql. для запроса данных из таблицы пользователей нужно взять название таблицы в "": `select * from "user";`
 Без кавычек получится запрос к таблице с пользователями postgres.
 - Запуск redis воркера `rq worker flask_app-tasks`
+
 ## Cсылки
 [Flask курс](https://habr.com/ru/post/346306/)
 [elasticsearch docker-compose official doc](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html)

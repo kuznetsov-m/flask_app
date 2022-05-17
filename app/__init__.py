@@ -61,6 +61,10 @@ def create_app(config_class=BaseConfig):
     app.redis = Redis.from_url(app.config['REDIS_URL'])
     app.task_queue = rq.Queue('flask_app-tasks', connection=app.redis)
 
+    # api
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
+
     if not app.debug and not app.testing:
         # Logs
         if app.config['LOG_TO_STDOUT']:
