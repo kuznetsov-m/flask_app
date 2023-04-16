@@ -36,6 +36,8 @@ services:
 
 # flask_app
   flask_app:
+    # Указываем имя для создаваемого контейнера
+    image: kuznetsov1024/flask_app:latest
     # Говорим что его надо будет собрать - в качестве контекста
     # передаем текущую директорию - в ней лежит Dockerfile
     build: .
